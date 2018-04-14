@@ -1,8 +1,17 @@
-﻿using System;
+﻿using Imposto.Core.Business;
+using Imposto.Core.Business.Interface;
+using Imposto.Core.Data;
+using Imposto.Core.Data.Interface;
+using Imposto.Core.Service;
+using Imposto.Core.Service.Interface;
+using Imposto.Core.Util;
+using Imposto.Core.Util.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Unity;
 
 namespace TesteImposto
 {
@@ -14,9 +23,21 @@ namespace TesteImposto
         [STAThread]
         static void Main()
         {
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormImposto());
+
+            UnityContainer container = new UnityContainer();
+            container.RegisterType<INotaFiscalBusiness, NotaFiscalBusiness>()
+                .RegisterType<INotaFiscalService, NotaFiscalService>()
+                .RegisterType<INotaFiscalRepository, NotaFiscalRepository>()
+                .RegisterType<IImpostoUtil, ImpostoUtil>();
+
+            var service = container.Resolve<INotaFiscalService>();
+            var util = container.Resolve<IImpostoUtil>();
+            var repository = container.Resolve<INotaFiscalRepository>();
+
+            Application.Run(new FormImposto(service, util, repository));
         }
     }
 }

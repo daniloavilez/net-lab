@@ -43,57 +43,66 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Location = new System.Drawing.Point(4, 11);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.Size = new System.Drawing.Size(112, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nome do Cliente";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 34);
+            this.label2.Location = new System.Drawing.Point(4, 42);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.Size = new System.Drawing.Size(102, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "Estado Origem";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 61);
+            this.label3.Location = new System.Drawing.Point(4, 75);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 13);
+            this.label3.Size = new System.Drawing.Size(104, 17);
             this.label3.TabIndex = 2;
             this.label3.Text = "Estado Destino";
             // 
             // textBoxNomeCliente
             // 
-            this.textBoxNomeCliente.Location = new System.Drawing.Point(95, 9);
+            this.textBoxNomeCliente.Location = new System.Drawing.Point(127, 11);
+            this.textBoxNomeCliente.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxNomeCliente.Name = "textBoxNomeCliente";
-            this.textBoxNomeCliente.Size = new System.Drawing.Size(939, 20);
+            this.textBoxNomeCliente.Size = new System.Drawing.Size(1251, 22);
             this.textBoxNomeCliente.TabIndex = 3;
             // 
             // txtEstadoOrigem
             // 
-            this.txtEstadoOrigem.Location = new System.Drawing.Point(95, 31);
+            this.txtEstadoOrigem.Location = new System.Drawing.Point(127, 38);
+            this.txtEstadoOrigem.Margin = new System.Windows.Forms.Padding(4);
+            this.txtEstadoOrigem.MaxLength = 2;
             this.txtEstadoOrigem.Name = "txtEstadoOrigem";
-            this.txtEstadoOrigem.Size = new System.Drawing.Size(939, 20);
+            this.txtEstadoOrigem.Size = new System.Drawing.Size(1251, 22);
             this.txtEstadoOrigem.TabIndex = 4;
             // 
             // txtEstadoDestino
             // 
-            this.txtEstadoDestino.Location = new System.Drawing.Point(95, 53);
+            this.txtEstadoDestino.Location = new System.Drawing.Point(127, 65);
+            this.txtEstadoDestino.Margin = new System.Windows.Forms.Padding(4);
+            this.txtEstadoDestino.MaxLength = 2;
             this.txtEstadoDestino.Name = "txtEstadoDestino";
-            this.txtEstadoDestino.Size = new System.Drawing.Size(939, 20);
+            this.txtEstadoDestino.Size = new System.Drawing.Size(1251, 22);
             this.txtEstadoDestino.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(2, 93);
+            this.label4.Location = new System.Drawing.Point(3, 114);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.Size = new System.Drawing.Size(105, 17);
             this.label4.TabIndex = 6;
             this.label4.Text = "Itens do pedido";
             // 
@@ -101,16 +110,18 @@
             // 
             this.dataGridViewPedidos.AllowUserToOrderColumns = true;
             this.dataGridViewPedidos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewPedidos.Location = new System.Drawing.Point(6, 109);
+            this.dataGridViewPedidos.Location = new System.Drawing.Point(8, 134);
+            this.dataGridViewPedidos.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewPedidos.Name = "dataGridViewPedidos";
-            this.dataGridViewPedidos.Size = new System.Drawing.Size(1028, 325);
+            this.dataGridViewPedidos.Size = new System.Drawing.Size(1371, 400);
             this.dataGridViewPedidos.TabIndex = 7;
             // 
             // buttonGerarNotaFiscal
             // 
-            this.buttonGerarNotaFiscal.Location = new System.Drawing.Point(907, 440);
+            this.buttonGerarNotaFiscal.Location = new System.Drawing.Point(1209, 542);
+            this.buttonGerarNotaFiscal.Margin = new System.Windows.Forms.Padding(4);
             this.buttonGerarNotaFiscal.Name = "buttonGerarNotaFiscal";
-            this.buttonGerarNotaFiscal.Size = new System.Drawing.Size(127, 23);
+            this.buttonGerarNotaFiscal.Size = new System.Drawing.Size(169, 28);
             this.buttonGerarNotaFiscal.TabIndex = 8;
             this.buttonGerarNotaFiscal.Text = "Gerar Nota Fiscal";
             this.buttonGerarNotaFiscal.UseVisualStyleBackColor = true;
@@ -118,9 +129,9 @@
             // 
             // FormImposto
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1043, 477);
+            this.ClientSize = new System.Drawing.Size(1391, 587);
             this.Controls.Add(this.buttonGerarNotaFiscal);
             this.Controls.Add(this.dataGridViewPedidos);
             this.Controls.Add(this.label4);
@@ -130,6 +141,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormImposto";
             this.Text = "Calculo de imposto";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPedidos)).EndInit();

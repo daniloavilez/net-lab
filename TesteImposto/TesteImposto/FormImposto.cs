@@ -9,19 +9,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Imposto.Core.Domain;
+using Imposto.Core.Service.Interface;
+using Imposto.Core.Data.Interface;
+using Imposto.Core.Util.Interface;
 
 namespace TesteImposto
 {
     public partial class FormImposto : Form
     {
         private Pedido pedido = new Pedido();
+        private readonly INotaFiscalService notaFiscalService;
+        private readonly IImpostoUtil impostoUtil;
+        private readonly INotaFiscalRepository notaFiscalRepository;
+
+        public FormImposto(INotaFiscalService notaFiscalService, 
+            IImpostoUtil impostoUtil, 
+            INotaFiscalRepository notaFiscalRepository)
+        {
+            InitializeComponent();
+            dataGridViewPedidos.AutoGenerateColumns = true;
+            dataGridViewPedidos.DataSource = GetTablePedidos();
+            ResizeColumns();
+
+            this.notaFiscalService = notaFiscalService;
+            this.impostoUtil = impostoUtil;
+            this.notaFiscalRepository = notaFiscalRepository;
+        }
 
         public FormImposto()
         {
-            InitializeComponent();
-            dataGridViewPedidos.AutoGenerateColumns = true;                       
-            dataGridViewPedidos.DataSource = GetTablePedidos();
-            ResizeColumns();
+            
         }
 
         private void ResizeColumns()
@@ -47,28 +64,85 @@ namespace TesteImposto
         }
 
         private void buttonGerarNotaFiscal_Click(object sender, EventArgs e)
-        {            
-            NotaFiscalService service = new NotaFiscalService();
-            pedido.EstadoOrigem = txtEstadoOrigem.Text;
-            pedido.EstadoDestino = txtEstadoDestino.Text;
-            pedido.NomeCliente = textBoxNomeCliente.Text;
-
+        {
             DataTable table = (DataTable)dataGridViewPedidos.DataSource;
+
+            if (ValidarCampos() || ValidarItens(table))
+            {
+                pedido.EstadoOrigem = txtEstadoOrigem.Text.ToUpper();
+                pedido.EstadoDestino = txtEstadoDestino.Text.ToUpper();
+                pedido.NomeCliente = textBoxNomeCliente.Text;
+                
+                foreach (DataRow row in table.Rows)
+                {
+                    pedido.ItensDoPedido.Add(
+                        new PedidoItem()
+                        {
+                            // TODO: Erro Corrigido
+                            Brinde = Convert.ToBoolean(row["Brinde"] == DBNull.Value ? default(bool) : row["Brinde"]),
+                            CodigoProduto = row["Codigo do produto"].ToString(),
+                            NomeProduto = row["Nome do produto"].ToString(),
+                            ValorItemPedido = Convert.ToDouble(row["Valor"].ToString())
+                        });
+                }
+
+                NotaFiscal notaFiscal = notaFiscalService.GerarNotaFiscal(pedido);
+
+                if (impostoUtil.GerarNotaFiscalEmXml(notaFiscal))
+                {
+                    notaFiscalRepository.AdicionarNotaFiscalEItens(notaFiscal);
+                }
+
+                txtEstadoDestino.Text = "";
+                txtEstadoOrigem.Text = "";
+                textBoxNomeCliente.Text = "";
+                dataGridViewPedidos.AutoGenerateColumns = true;
+                dataGridViewPedidos.DataSource = GetTablePedidos();
+                ResizeColumns();
+
+                MessageBox.Show("Operação efetuada com sucesso"); 
+            }
+        }
+
+        private bool ValidarItens(DataTable table)
+        {
+            if (table.Rows.Count == 0)
+            {
+                MessageBox.Show("Ao menos um item deve ser inserido");
+                return false;
+            }
 
             foreach (DataRow row in table.Rows)
             {
-                pedido.ItensDoPedido.Add(
-                    new PedidoItem()
-                    {
-                        Brinde = Convert.ToBoolean(row["Brinde"]),
-                        CodigoProduto =  row["Codigo do produto"].ToString(),
-                        NomeProduto = row["Nome do produto"].ToString(),
-                        ValorItemPedido = Convert.ToDouble(row["Valor"].ToString())            
-                    });
+                if (string.IsNullOrEmpty(row["Codigo do produto"].ToString()))
+                {
+                    MessageBox.Show("Código do produto deve ser preenchido.");
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(row["Nome do produto"].ToString()))
+                {
+                    MessageBox.Show("Nome do produto deve ser preenchido.");
+                    return false;
+                }
             }
 
-            service.GerarNotaFiscal(pedido);
-            MessageBox.Show("Operação efetuada com sucesso");
+            return true;
+        }
+
+        private bool ValidarCampos()
+        {
+            bool flagValidado = true;
+
+            foreach (string item in impostoUtil
+                .ValidarCampos(txtEstadoOrigem.Text.ToUpper(), 
+                    txtEstadoDestino.Text.ToUpper(), textBoxNomeCliente.Text))
+            {
+                MessageBox.Show(item);
+                flagValidado = false;
+            }
+
+            return flagValidado;
         }
     }
 }
