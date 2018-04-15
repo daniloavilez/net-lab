@@ -20,11 +20,9 @@ namespace TesteImposto
         private Pedido pedido = new Pedido();
         private readonly INotaFiscalService notaFiscalService;
         private readonly IImpostoUtil impostoUtil;
-        private readonly INotaFiscalRepository notaFiscalRepository;
 
         public FormImposto(INotaFiscalService notaFiscalService, 
-            IImpostoUtil impostoUtil, 
-            INotaFiscalRepository notaFiscalRepository)
+            IImpostoUtil impostoUtil)
         {
             InitializeComponent();
             dataGridViewPedidos.AutoGenerateColumns = true;
@@ -33,7 +31,6 @@ namespace TesteImposto
 
             this.notaFiscalService = notaFiscalService;
             this.impostoUtil = impostoUtil;
-            this.notaFiscalRepository = notaFiscalRepository;
         }
 
         public FormImposto()
@@ -86,21 +83,23 @@ namespace TesteImposto
                         });
                 }
 
-                NotaFiscal notaFiscal = notaFiscalService.GerarNotaFiscal(pedido);
+                bool notaFiscalGerada = notaFiscalService.GerarNotaFiscal(pedido);
 
-                if (impostoUtil.GerarNotaFiscalEmXml(notaFiscal))
+                if (notaFiscalGerada)
                 {
-                    notaFiscalRepository.AdicionarNotaFiscalEItens(notaFiscal);
+                    txtEstadoDestino.Text = "";
+                    txtEstadoOrigem.Text = "";
+                    textBoxNomeCliente.Text = "";
+                    dataGridViewPedidos.AutoGenerateColumns = true;
+                    dataGridViewPedidos.DataSource = GetTablePedidos();
+                    ResizeColumns();
+
+                    MessageBox.Show("Operação efetuada com sucesso");
                 }
-
-                txtEstadoDestino.Text = "";
-                txtEstadoOrigem.Text = "";
-                textBoxNomeCliente.Text = "";
-                dataGridViewPedidos.AutoGenerateColumns = true;
-                dataGridViewPedidos.DataSource = GetTablePedidos();
-                ResizeColumns();
-
-                MessageBox.Show("Operação efetuada com sucesso"); 
+                else
+                {
+                    MessageBox.Show("Houve algum erro contate os desenvolvedores");
+                }
             }
         }
 

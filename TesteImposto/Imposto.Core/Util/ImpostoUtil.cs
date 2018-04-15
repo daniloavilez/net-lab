@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -17,7 +18,7 @@ namespace Imposto.Core.Util
         private readonly string[] estadosValidos = {"SP", "RJ", "MG", "RO", "PE", "PB", "PR", "PI",
             "SE", "TO", "PA"};
 
-        public bool GerarNotaFiscalEmXml(NotaFiscal notaFiscal)
+        public virtual bool GerarNotaFiscalEmXml(NotaFiscal notaFiscal)
         {
             try
             {
@@ -44,15 +45,15 @@ namespace Imposto.Core.Util
 
         private static void CriarDiretorioESetarPermissoes()
         {
-            DirectoryInfo directory = Directory.CreateDirectory(PATH);  
+            DirectoryInfo directory = Directory.CreateDirectory(PATH);
 
-            //DirectorySecurity security = directory.GetAccessControl();
+            DirectorySecurity security = directory.GetAccessControl();
 
-            //security.AddAccessRule(new FileSystemAccessRule(@"LAPTOP-DT7CSHCG\danil",
-            //                        FileSystemRights.Modify | FileSystemRights.Delete | FileSystemRights.ReadAndExecute,
-            //                        AccessControlType.Deny));
+            security.AddAccessRule(new FileSystemAccessRule(Environment.UserDomainName + "\\" + Environment.UserName,
+                                    FileSystemRights.ReadAndExecute,
+                                    AccessControlType.Deny));
 
-            //directory.SetAccessControl(security);
+            directory.SetAccessControl(security);
         }
 
         public List<string> ValidarCampos(string estadoOrigem, string estadoDestino, string nomeCliente)

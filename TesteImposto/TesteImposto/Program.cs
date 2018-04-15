@@ -35,9 +35,8 @@ namespace TesteImposto
 
             var service = container.Resolve<INotaFiscalService>();
             var util = container.Resolve<IImpostoUtil>();
-            var repository = container.Resolve<INotaFiscalRepository>();
 
-            Application.Run(new FormImposto(service, util, repository));
+            Application.Run(new FormImposto(service, util));
         }
     }
 }

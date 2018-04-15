@@ -18,7 +18,7 @@ namespace Imposto.Core.Data
 
         }
 
-        public void AdicionarNotaFiscalEItens(NotaFiscal notaFiscal)
+        public virtual void AdicionarNotaFiscalEItens(NotaFiscal notaFiscal)
         {
             try
             {
