@@ -2,7 +2,9 @@
 
 ## Objetivo
 
-O objetivo da tela é emitir nota fiscal para pedidos inseridos na tela.
+O objetivo da tela é o faturamento de um pedido feito por um cliente.
+
+Gerando assim uma nota fiscal, com os devidos cálculos dos impostos e descontos para que o produto possa ser retirado do estoque e ser enviado para o solicitante do pedido.
 
 ## Atividades Desenvolvidas
 
@@ -20,7 +22,7 @@ O objetivo da tela é emitir nota fiscal para pedidos inseridos na tela.
 
 ## Injeção de Dependência e Inversão de Controle
 
-- Inserção de Unity para Injeção de Dependência e Inversão de Controle
+- Inserção de [Unity](https://github.com/unitycontainer/unity) para Injeção de Dependência e Inversão de Controle
 - Facilitando os testes unitários feito durante a refatoração
 
 ```C#
