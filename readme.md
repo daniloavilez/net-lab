@@ -2,9 +2,13 @@
 
 ## Objetivo
 
-O objetivo da tela é o faturamento de um pedido feito por um cliente.
+O objetivo da tela é o faturamento de itens criados pela indústria.
 
-Gerando assim uma nota fiscal, com os devidos cálculos dos impostos e descontos para que o produto possa ser retirado do estoque e ser enviado para o solicitante do pedido.
+> São duas as principais hipóteses de ocorrência do fato gerador do IPI:
+>1. Na importação: o desembaraço aduaneiro de produtos de procedência estrangeira;
+>2. Na operação interna: a saída de produto de estabelecimento industrial, ou equiparado a industrial.
+
+Gerando assim uma nota fiscal, com os devidos cálculos dos impostos e descontos.
 
 ## Atividades Desenvolvidas
 
@@ -15,8 +19,10 @@ Gerando assim uma nota fiscal, com os devidos cálculos dos impostos e descontos
 - Alguns Bugs foram resolvidos
 - Testes unitários da camada Business e Service foram criados
 - Foi inserido Injeção de Dependência e Inversão de Controle para realizar Mocks nos testes unitários
-- Criado nova procedure `P_CFOP_GROUP` retornando o layout:
+- Criado nova procedure `P_SUM_ICMS_IPI_BY_CFOP` retornando o layout:
 > CFOP | Valor Total da Base de ICMS | Valor Total do ICMS | Valor Total da Base de IPI | Valor Total do IPI
+- Utilizado `SqlTransaction` para encadear a gravação da nota fiscal e seus itens (Banco de Dados Relacional)
+- `DropDownLists` foram adicionados para Estado origem e Estado Destino no Windows Form
 
 ---
 

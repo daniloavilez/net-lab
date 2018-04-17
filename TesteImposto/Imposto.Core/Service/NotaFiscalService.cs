@@ -49,6 +49,10 @@ namespace Imposto.Core.Service
                 {
                     notaFiscalRepository.AdicionarNotaFiscalEItens(notaFiscal);
                 }
+                else
+                {
+                    return false;
+                }
 
                 return true;
             }

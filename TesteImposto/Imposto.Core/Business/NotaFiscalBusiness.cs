@@ -19,6 +19,11 @@ namespace Imposto.Core.Business
         {
         }
 
+        /// <summary>
+        /// Emiti nota fiscal do pedido feito através do sistema
+        /// </summary>
+        /// <param name="pedido">Pedido solicitado</param>
+        /// <returns>Retorna a Nota Fiscal emitida</returns>
         public NotaFiscal EmitirNotaFiscal(Pedido pedido)
         {
             NotaFiscal notaFiscal = new NotaFiscal
@@ -40,6 +45,11 @@ namespace Imposto.Core.Business
             return notaFiscal;
         }
 
+        /// <summary>
+        /// Preenche os itens do Pedido na Nota Fiscal
+        /// </summary>
+        /// <param name="pedido">Pedido solicitado</param>
+        /// <param name="notaFiscal">Nota Fiscal onde os itens do pedido serão preenchidos</param>
         private static void PreencherItensDaNotaFiscal(Pedido pedido, NotaFiscal notaFiscal)
         {
             foreach (PedidoItem itemPedido in pedido.ItensDoPedido)
@@ -50,8 +60,7 @@ namespace Imposto.Core.Business
 
                 CalcularIcms(notaFiscal, itemPedido, notaFiscalItem);
 
-                // TODO: Fazer os testes unitários
-                CalcularIpi(notaFiscal, itemPedido, notaFiscalItem);
+                CalcularIpi(itemPedido, notaFiscalItem);
 
                 VerificarDesconto(notaFiscal, notaFiscalItem);
 
@@ -62,6 +71,11 @@ namespace Imposto.Core.Business
             }
         }
 
+        /// <summary>
+        /// Aplica desconto para os Estados Destino da região Sudeste
+        /// </summary>
+        /// <param name="notaFiscal">Nota fiscal</param>
+        /// <param name="notaFiscalItem">Item da Nota Fiscal</param>
         private static void VerificarDesconto(NotaFiscal notaFiscal, NotaFiscalItem notaFiscalItem)
         {
             if (notaFiscal.EstadoDestino == "SP" || notaFiscal.EstadoDestino == "RJ" ||
@@ -71,12 +85,25 @@ namespace Imposto.Core.Business
             }
         }
 
-        private static void CalcularIpi(NotaFiscal notaFiscal, PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
+        #region Cálculo de Impostos
+
+        /// <summary>
+        /// Calcula IPI de acordo com a regulamentação
+        /// </summary>
+        /// <param name="itemPedido">Item do Pedido</param>
+        /// <param name="notaFiscalItem">Item da Nota Fiscal</param>
+        private static void CalcularIpi(PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
         {
             notaFiscalItem.BaseIpi = itemPedido.ValorItemPedido;
             AplicarRegraBrindeIpi(itemPedido, notaFiscalItem);
         }
 
+        /// <summary>
+        /// Calcula IPI de acordo com a regulamentação
+        /// </summary>
+        /// <param name="notaFiscal">Informações da Nota Fiscal</param>
+        /// <param name="itemPedido">Item do Pedido</param>
+        /// <param name="notaFiscalItem">Item da Nota Fiscal</param>
         private static void CalcularIcms(NotaFiscal notaFiscal, PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
         {
             if (notaFiscal.EstadoDestino == notaFiscal.EstadoOrigem)
@@ -102,6 +129,48 @@ namespace Imposto.Core.Business
             AplicarRegraBrindeIcms(itemPedido, notaFiscalItem);
         }
 
+        /// <summary>
+        /// Aplicação de regra de brinde ICMS
+        /// </summary>
+        /// <param name="itemPedido">Item do Pedido</param>
+        /// <param name="notaFiscalItem">Item da Nota Fiscal</param>
+        private static void AplicarRegraBrindeIcms(PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
+        {
+            if (itemPedido.Brinde)
+            {
+                notaFiscalItem.TipoIcms = "60";
+                notaFiscalItem.AliquotaIcms = 0.18;
+                notaFiscalItem.ValorIcms = notaFiscalItem.BaseIcms * notaFiscalItem.AliquotaIcms;
+            }
+        }
+
+        /// <summary>
+        /// Aplicação de regra de brinde IPI
+        /// </summary>
+        /// <param name="itemPedido">Item do Pedido</param>
+        /// <param name="notaFiscalItem">Item da Nota Fiscal</param>
+        private static void AplicarRegraBrindeIpi(PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
+        {
+            if (itemPedido.Brinde)
+            {
+                notaFiscalItem.ValorIpi = notaFiscalItem.BaseIpi * notaFiscalItem.AliquotaIpi;
+            }
+            else
+            {
+                notaFiscalItem.AliquotaIpi = 0.1;
+                notaFiscalItem.ValorIpi = notaFiscalItem.BaseIpi * notaFiscalItem.AliquotaIpi;
+            }
+        }
+
+        #endregion
+
+        #region Seleção de CFOP
+
+        /// <summary>
+        /// Seleciona cfop de acordo com Estado Origem e Estado Destino
+        /// </summary>
+        /// <param name="notaFiscal">Informações dos Estados</param>
+        /// <param name="notaFiscalItem">Item que receberá a CFOP selecionada</param>
         private static void PreencherCfop(NotaFiscal notaFiscal, NotaFiscalItem notaFiscalItem)
         {
             if (notaFiscal.EstadoOrigem == "SP")
@@ -214,27 +283,6 @@ namespace Imposto.Core.Business
             return string.Empty;
         }
 
-        private static void AplicarRegraBrindeIcms(PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
-        {
-            if (itemPedido.Brinde)
-            {
-                notaFiscalItem.TipoIcms = "60";
-                notaFiscalItem.AliquotaIcms = 0.18;
-                notaFiscalItem.ValorIcms = notaFiscalItem.BaseIcms * notaFiscalItem.AliquotaIcms;
-            }
-        }
-
-        private static void AplicarRegraBrindeIpi(PedidoItem itemPedido, NotaFiscalItem notaFiscalItem)
-        {
-            if (itemPedido.Brinde)
-            {
-                notaFiscalItem.ValorIpi = notaFiscalItem.BaseIpi * notaFiscalItem.AliquotaIpi;
-            }
-            else
-            {
-                notaFiscalItem.AliquotaIpi = 0.1;
-                notaFiscalItem.ValorIpi = notaFiscalItem.BaseIpi * notaFiscalItem.AliquotaIpi;
-            }
-        }
+        #endregion
     }
 }

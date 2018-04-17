@@ -37,6 +37,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.dataGridViewPedidos = new System.Windows.Forms.DataGridView();
             this.buttonGerarNotaFiscal = new System.Windows.Forms.Button();
+            this.ddlEstadoOrigem = new System.Windows.Forms.ComboBox();
+            this.ddlEstadoDestino = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPedidos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,6 +88,7 @@
             this.txtEstadoOrigem.Name = "txtEstadoOrigem";
             this.txtEstadoOrigem.Size = new System.Drawing.Size(1251, 22);
             this.txtEstadoOrigem.TabIndex = 4;
+            this.txtEstadoOrigem.Visible = false;
             // 
             // txtEstadoDestino
             // 
@@ -95,6 +98,7 @@
             this.txtEstadoDestino.Name = "txtEstadoDestino";
             this.txtEstadoDestino.Size = new System.Drawing.Size(1251, 22);
             this.txtEstadoDestino.TabIndex = 5;
+            this.txtEstadoDestino.Visible = false;
             // 
             // label4
             // 
@@ -127,11 +131,45 @@
             this.buttonGerarNotaFiscal.UseVisualStyleBackColor = true;
             this.buttonGerarNotaFiscal.Click += new System.EventHandler(this.buttonGerarNotaFiscal_Click);
             // 
+            // ddlEstadoOrigem
+            // 
+            this.ddlEstadoOrigem.FormattingEnabled = true;
+            this.ddlEstadoOrigem.Items.AddRange(new object[] {
+            "",
+            "SP",
+            "MG"});
+            this.ddlEstadoOrigem.Location = new System.Drawing.Point(127, 39);
+            this.ddlEstadoOrigem.Name = "ddlEstadoOrigem";
+            this.ddlEstadoOrigem.Size = new System.Drawing.Size(1252, 24);
+            this.ddlEstadoOrigem.TabIndex = 4;
+            // 
+            // ddlEstadoDestino
+            // 
+            this.ddlEstadoDestino.FormattingEnabled = true;
+            this.ddlEstadoDestino.Items.AddRange(new object[] {
+            "",
+            "RJ",
+            "PE",
+            "MG",
+            "PB",
+            "PR",
+            "PI",
+            "RO",
+            "SE",
+            "TO",
+            "PA"});
+            this.ddlEstadoDestino.Location = new System.Drawing.Point(127, 67);
+            this.ddlEstadoDestino.Name = "ddlEstadoDestino";
+            this.ddlEstadoDestino.Size = new System.Drawing.Size(1252, 24);
+            this.ddlEstadoDestino.TabIndex = 5;
+            // 
             // FormImposto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1391, 587);
+            this.Controls.Add(this.ddlEstadoDestino);
+            this.Controls.Add(this.ddlEstadoOrigem);
             this.Controls.Add(this.buttonGerarNotaFiscal);
             this.Controls.Add(this.dataGridViewPedidos);
             this.Controls.Add(this.label4);
@@ -161,6 +199,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridView dataGridViewPedidos;
         private System.Windows.Forms.Button buttonGerarNotaFiscal;
+        private System.Windows.Forms.ComboBox ddlEstadoOrigem;
+        private System.Windows.Forms.ComboBox ddlEstadoDestino;
     }
 }
 

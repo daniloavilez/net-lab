@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Imposto.Core.Domain;
 using Imposto.Core.Service.Interface;
-using Imposto.Core.Data.Interface;
 using Imposto.Core.Util.Interface;
 
 namespace TesteImposto
@@ -64,10 +63,12 @@ namespace TesteImposto
         {
             DataTable table = (DataTable)dataGridViewPedidos.DataSource;
 
-            if (ValidarCampos() || ValidarItens(table))
+            if (ValidarCampos() && ValidarItens(table))
             {
-                pedido.EstadoOrigem = txtEstadoOrigem.Text.ToUpper();
-                pedido.EstadoDestino = txtEstadoDestino.Text.ToUpper();
+                //pedido.EstadoOrigem = txtEstadoOrigem.Text.ToUpper();
+                //pedido.EstadoDestino = txtEstadoDestino.Text.ToUpper();
+                pedido.EstadoOrigem = ddlEstadoOrigem.SelectedItem.ToString().ToUpper();
+                pedido.EstadoDestino = ddlEstadoDestino.SelectedItem.ToString().ToUpper();
                 pedido.NomeCliente = textBoxNomeCliente.Text;
                 
                 foreach (DataRow row in table.Rows)
@@ -87,8 +88,10 @@ namespace TesteImposto
 
                 if (notaFiscalGerada)
                 {
-                    txtEstadoDestino.Text = "";
-                    txtEstadoOrigem.Text = "";
+                    //txtEstadoDestino.Text = "";
+                    //txtEstadoOrigem.Text = "";
+                    ddlEstadoOrigem.SelectedIndex = 0;
+                    ddlEstadoDestino.SelectedIndex = 0;
                     textBoxNomeCliente.Text = "";
                     dataGridViewPedidos.AutoGenerateColumns = true;
                     dataGridViewPedidos.DataSource = GetTablePedidos();
@@ -134,8 +137,8 @@ namespace TesteImposto
             bool flagValidado = true;
 
             foreach (string item in impostoUtil
-                .ValidarCampos(txtEstadoOrigem.Text.ToUpper(), 
-                    txtEstadoDestino.Text.ToUpper(), textBoxNomeCliente.Text))
+                .ValidarCampos(ddlEstadoOrigem.SelectedItem.ToString().ToUpper(), 
+                    ddlEstadoDestino.SelectedItem.ToString().ToUpper(), textBoxNomeCliente.Text))
             {
                 MessageBox.Show(item);
                 flagValidado = false;

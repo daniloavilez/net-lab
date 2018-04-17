@@ -24,6 +24,12 @@ namespace Imposto.Test
             
         }
 
+        [TestCleanup]
+        public void Cleanup()
+        {
+            notaFiscalService = null;
+        }
+
         [TestMethod]
         public void NotaFiscal_Gerada_Com_Sucesso()
         {
